@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,10 +45,6 @@ public class MainActivity extends AppCompatActivity {
         boolean zweiSpaltenModus; /* = false */
 
 
-
-
-
-
         // wenn die Activity erstellt wurde, dann wird diese Methode weitermachen
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 setListAdapter(new ArrayAdapter(getContext(),
                         R.layout.myfragment,
                         R.id.twolineTextViewText1,
-                        new String[]{"mp_burg", "mp_qhat"})
+                        new String[]{"mp_burg", "mp_qhat", "3", "4"})
                                {
                                    @NonNull
                                    @Override
@@ -75,11 +72,14 @@ public class MainActivity extends AppCompatActivity {
                                        View view = super.getView(position, convertView, parent);
                                        TextView text1 = (TextView) view.findViewById(R.id.twolineTextViewText1);
                                        TextView text2 = (TextView) view.findViewById(R.id.twolineTextViewText2);
-                                       text1.setText("1");
-                                       text2.setText("2");
+                                       text1.setText("Test Map");
+                                       text2.setText("mp_testmap");
+
                                        return view;
                                    }
                                }
+
+
                 );
             }
 
@@ -111,8 +111,11 @@ public class MainActivity extends AppCompatActivity {
             outState.putInt(STR_ZULETZT_SELEKTIERT, zuletztSelektiert);
         }
 
-        public void onListItemClick(ListView l, View v, int position, long id) {
+        public void onListItemClick(ListView l, View view, int position, long id) {
             detailsAnzeigen(position);
+            TextView text1 = (TextView) view.findViewById(R.id.twolineTextViewText1);
+            TextView text2 = (TextView) view.findViewById(R.id.twolineTextViewText2);
+
         }
 
         /**
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     } // <-- end of inner class
 
 
-
+    // == Details als Fragment ==
     public static class DetailsFragment extends Fragment {
         public static final String INDEX = "index";
 
@@ -171,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             ScrollView scroller = null;
 
@@ -181,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
                 TextView text = new TextView(getActivity());
                 scroller.addView(text); // TextView wird in die ScrollView geklinkt
                 text.setText("Element " + (getIndex()+1) + " ist sichtbar" );
+                text.setTextColor(Color.WHITE);
+
             }
 
             // Aufbau fertig, nun Ausgabe scroller:
@@ -189,7 +196,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // == Details als Activity ==
+    // Activity erstellt sich aus dem Fragment
+    // -> also Fragment bearbeiten!
     public static class DetailsActivity extends AppCompatActivity {
+
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
