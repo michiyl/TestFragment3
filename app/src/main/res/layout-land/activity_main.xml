@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <!--
+    beide Views haben die gleiche Verteilung 1:1
+    wenn die Verteilung geändert werden soll, dann weight ändern
+    -->
+    <fragment
+        android:id="@+id/auswahl"
+        class="com.exercise.master.testfragment3.MainActivity$AuswahlFragment"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:layout="@layout/myfragment"/>
+    <!-- jetzt die Detailansicht -->
+    <FrameLayout
+        android:id="@+id/details"
+        android:layout_weight="1"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:background="?android:attr/detailsElementBackground"></FrameLayout>
+
+</LinearLayout>
