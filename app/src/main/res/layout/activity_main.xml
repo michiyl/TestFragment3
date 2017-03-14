@@ -8,7 +8,7 @@
     android:background="@drawable/w1714"
     tools:context="com.exercise.master.testfragment3.MainActivity">
 
-    <!-- class wurde als innere Klasse erstllt -->
+    <!-- class wurde als innere Klasse erstellt -->
     <fragment
         android:id="@+id/auswahl"
         class="com.exercise.master.testfragment3.MainActivity$AuswahlFragment"

@@ -17,12 +17,29 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         tools:layout="@layout/myfragment"/>
-    <!-- jetzt die Detailansicht -->
-    <FrameLayout
+
+    <fragment
         android:id="@+id/details"
+        class="com.exercise.master.testfragment3.MainActivity$DetailsFragment"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/w1714"></FrameLayout>
+        tools:layout="@layout/fragment_details"/>
+
+    <!-- jetzt die Detailansicht -->
+    <!-- FrameLayout
+        android:id="@+id/details"
+        class="com.exercise.master.testfragment3.MainActivity$DetailsFragment"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/w1714">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"/>
+    </FrameLayout -->
 
 </LinearLayout>

@@ -11,11 +11,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -24,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    protected int selectedItem = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         int zuletztSelektiert = 0;
         boolean zweiSpaltenModus; /* = false */
 
+        ArrayList<String> myMapArrayList = new ArrayList<>();
 
         // wenn die Activity erstellt wurde, dann wird diese Methode weitermachen
         public void onActivityCreated(Bundle savedInstanceState) {
@@ -56,15 +62,22 @@ public class MainActivity extends AppCompatActivity {
 
             /*
             setListAdapter(new ArrayAdapter<>(getActivity(),
-                    android.R.layout.simple_list_item_2,
+                    android.R.layout.simple_list_item_1,
                     new String[]{"eins", "zwei", "drei"}));
             */
 
+            // für simple_list_item_2 muss der Adapter anders gesetzt werden:
+            // ACHTUNG: hier noch mit android.R-Einstellungen, also vorgegebene Elemente!
+            // wenn man eigene Layoutelemente benutzen will, dann:
+            // 1. Strg + Klick auf
+            //      android.R.layout.simple_list_item_2
+            //      -> dann darin alles in ein eigenes XML-Layout kopieren & Einträge umbenennen
+            // 2. "android.R.id.text1" in die ID der eigenen TextView ändern!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 setListAdapter(new ArrayAdapter(getContext(),
                         R.layout.myfragment,
                         R.id.twolineTextViewText1,
-                        new String[]{"mp_burg", "mp_qhat", "3", "4"})
+                        new String[]{"XYz", "qwerty", "3", "4"})   // Anzahl der Einträge = Anzahl der Listenelemente!
                                {
                                    @NonNull
                                    @Override
@@ -86,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             // prüfen, ob das Details-Fragment eingebunden weden kann
-            View detailFragment = getActivity().findViewById(R.id.details);
+            View detailFragment = getActivity().findViewById(R.id.details_fragment_layoutParent);
             // wenn detailFragment nicht null ist UND die Sichtbarkeit auf "sichtbar ist" => true
             zweiSpaltenModus = detailFragment != null && detailFragment.getVisibility() == View.VISIBLE;
 
@@ -116,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             TextView text1 = (TextView) view.findViewById(R.id.twolineTextViewText1);
             TextView text2 = (TextView) view.findViewById(R.id.twolineTextViewText2);
 
+            text1.setTextColor(Color.GREEN);
         }
 
         /**
@@ -128,7 +142,8 @@ public class MainActivity extends AppCompatActivity {
             if(zweiSpaltenModus /* = true */) {
                 // Eintrag soll wieder selektiert sein
                 getListView().setItemChecked(index, true);
-                DetailsFragment details = (DetailsFragment)getFragmentManager().findFragmentById(R.id.details);
+                //DetailsFragment details = (DetailsFragment)getFragmentManager().findFragmentById(R.id.details);
+                DetailsFragment details = (DetailsFragment)getFragmentManager().findFragmentById(R.id.details_fragment_layoutParent);
 
                 if(details == null || details.getIndex() != index) {
                     // neues Fragment zum selektierten Eintrag anzeigen
@@ -146,8 +161,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-
-
     } // <-- end of inner class
 
 
@@ -174,11 +187,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            // Altes Verfahren mit nur einer ScrollView, die hier erzeugt wurde
+            /*
             ScrollView scroller = null;
-
             // Aufbau des scroller:
             // wenn der container zur Verfügung steht, dann erzeuge was
             if (container != null) {
@@ -187,11 +199,24 @@ public class MainActivity extends AppCompatActivity {
                 scroller.addView(text); // TextView wird in die ScrollView geklinkt
                 text.setText("Element " + (getIndex()+1) + " ist sichtbar" );
                 text.setTextColor(Color.WHITE);
+            }
+            // Aufbau fertig, nun Ausgabe scroller:
+            // return scroller;
+            */
 
+            // === neu und angepasst ===
+            LinearLayout mylayout = (LinearLayout)inflater.inflate(R.layout.fragment_details, container, false);
+            TextView text = null;
+            if (container != null) {
+                text = (TextView)container.findViewById(R.id.details_fragment_textView);
+                text.setText("Element " + (getIndex()+1) + " ist sichtbar" );
+            }
+            else {
+                Log.d("DetailsFragment", "Else! " + container.toString());
             }
 
-            // Aufbau fertig, nun Ausgabe scroller:
-            return scroller;
+
+            return mylayout;
         }
     }
 
